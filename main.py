@@ -47,7 +47,7 @@ def load_language(file):
     Function for loading a file with the selected language
     '''
     
-    with open(f'locales/{file}', 'r') as f:
+    with open(f'locales/{file}', 'r', encoding='utf-8') as f:
         return json.load(f)
 
 
