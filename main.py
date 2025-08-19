@@ -238,8 +238,18 @@ def generate_password(password_length=50):
         
 def main():
     global current_language
-    with open('logo.txt', 'r') as f:
-        print(f.read())
+    try:
+        with open('logo.txt', 'r', encoding='utf-8') as f:
+            print(f.read())
+    except UnicodeDecodeError:
+        try:
+            with open('logo.txt', 'r', encoding='cp866') as f:
+                print(f.read())
+        except:
+            print("┌─────────────────────────────┐")
+            print("│       PASSWORD KEEPER       │")
+            print("└─────────────────────────────┘")
+            print()
     
     current_language = load_language(select_languages())
     initialization()
