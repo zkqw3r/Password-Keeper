@@ -9,6 +9,8 @@ import json
 import pyperclip
 
 
+# Configuration
+
 DATA_FILE = "vault.enc"
 SALT_FILE = 'salt.bin'
 LOCALES_DIR = "locales"
@@ -22,6 +24,10 @@ current_language = None
 
 
 def select_languages():
+    '''
+    The language selection function returns 
+    the name of the file containing the required message templates.
+    '''
     print('Выберите язык | Select Languages\n')
     languages = list(LANGUAGES.items())
     while True:
@@ -32,15 +38,22 @@ def select_languages():
             return languages[choice][1].get('file')
         except Exception as e:
             print(e)
-            print("\nНеверный выбор. Попробуйте снова / Invalid choice. Try again\n")
+            print("\nНеверный выбор. Попробуйте снова | Invalid choice. Try again\n")
 
 
 def load_language(file):
+    '''
+    Function for loading a file with the selected language
+    '''
     with open(f'locales/{file}', 'r') as f:
         return json.load(f)
 
 
 def initialization():
+    '''
+    Initialization function to check for existence of vault.enc and salt.bin 
+    andcreates them if they do not exist
+    '''
     if not os.path.exists(DATA_FILE):
         print(current_language.get('initialization_start_message'))
         master_password = getpass(prompt=current_language.get('master_password_prompt'), mask='*')
@@ -59,6 +72,10 @@ def initialization():
 
 
 def load_vault():
+    '''
+    A function that displays to the user all of his saved services 
+    then displays the login and password for the selected service
+    '''
     master_password = getpass(current_language.get('master_password_prompt'), mask='*')
     with open(SALT_FILE, 'rb') as f:
         salt = f.read()
@@ -90,20 +107,31 @@ def load_vault():
     
 
 def get_service_name():
+    '''
+    Function to get the service name (used to create a record)
+    '''
     while True:
         service = input(current_language.get('service_prompt'))
         if service.strip():
             return service.strip()
         print(current_language.get('service_empty_error'))
 
+
 def get_login():
+    '''
+    Function to get login (used to create record)
+    '''
     while True:
         login = input(current_language.get('login_prompt'))
         if login.strip():
             return login.strip()
         print(current_language.get('login_empty_error'))
 
+
 def get_password_length():
+    '''
+    Function to get the password length (used to create record)
+    '''
     while True:
         try:
             length = int(input(current_language.get('password_length_prompt')))
@@ -115,6 +143,9 @@ def get_password_length():
 
 
 def add_password():
+    '''
+    Function to add password/create record
+    '''
     try:
         master_password = getpass(current_language.get('master_password_prompt'), mask='*')
         with open(SALT_FILE, 'rb') as f:
@@ -183,6 +214,9 @@ def add_password():
     
 
 def generate_password(password_length=50):
+    '''
+    Function to generate a password of arbitrary length for a user using the Fisher-Yates algorithm
+    '''
     password = []
     for _ in range(password_length):
         password += secrets.choice(string.ascii_letters+'0123456789!@#$%*&-_=+/?.,')
@@ -199,7 +233,6 @@ def main():
         print(f.read())
     
     current_language = load_language(select_languages())
-
     initialization()
     
     choice = None
