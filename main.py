@@ -144,6 +144,8 @@ def get_password_length():
             length = int(input(current_language.get('password_length_prompt')))
             if length >= 8:
                 return length
+            elif length == 0:
+                return 50
             print(current_language.get('password_length_error'))
         except ValueError:
             print(current_language.get('password_length_invalid'))
