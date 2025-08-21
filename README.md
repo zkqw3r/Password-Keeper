@@ -45,7 +45,7 @@ pip install -r requirements.txt
 #### First run
 
 ```bash
-python password_manager.py
+python main.py
 ```
 
 When you first launch the program:
